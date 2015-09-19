@@ -4,7 +4,7 @@
         "location",
         "configurable"
     ],
-    "companyName": "example.zhaostephen.com",
+    "companyName": "PebbleTrek",
     "longName": "PebbleTrek",
     "projectType": "native",
     "resources": {
@@ -19,7 +19,6 @@
     "uuid": "099337b8-7b87-41b3-9c1d-f3e2e7d722dc",
     "versionLabel": "1.0",
     "watchapp": {
-        "onlyShownOnCommunication": true,
-        "watchface": true
+        "watchface": false
     }
 }
