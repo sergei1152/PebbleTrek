@@ -1,6 +1,9 @@
 #include <pebble.h>
 #include <math.h>
 #include <stdlib.h>
+#include "custom_math.h"
+
+  
 
 static Window *s_main_window;
 TextLayer *text_layer; //For outputting accelorometer values. Remove this after.
@@ -9,21 +12,6 @@ TextLayer *text_layer; //For outputting accelorometer values. Remove this after.
 int max_acc=0;
 int min_acc=10E6;
 const uint32_t accelorometer_num_samples=1; //Number of samples for the accelerometer to take
-
-//TODO: Convert this to a integer sqrt for better efficiency
-float my_sqrt(const float num) {
-  const uint MAX_STEPS = 40;
-  const float MAX_ERROR = 0.001;
-  
-  float answer = num;
-  float ans_sqr = answer * answer;
-  uint step = 0;
-  while((ans_sqr - num > MAX_ERROR) && (step++ < MAX_STEPS)) {
-    answer = (answer + (num / answer)) / 2;
-    ans_sqr = answer * answer;
-  }
-  return answer;
-}
 
 static void main_window_load(Window *window) {
   // Create Window's child Layers here
@@ -38,7 +26,7 @@ static void dropDetector(AccelData *data, uint32_t num_samples) {
   // Long lived buffer
   static char s_buffer[128];
   
-  int acc_mag=my_sqrt(data[0].x*data[0].x+data[0].y*data[0].y+data[0].z*data[0].z);
+  int acc_mag=float_sqrt(data[0].x*data[0].x+data[0].y*data[0].y+data[0].z*data[0].z);
   if(acc_mag>max_acc){
     max_acc=acc_mag;
   }
