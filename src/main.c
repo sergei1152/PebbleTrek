@@ -29,6 +29,7 @@ static void main_window_unload(Window *window) {
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
      max_acc=0;
      min_acc=10E6;
+    fallDetected=false;
 }
 static void click_config_provider(void *context) {
   // Register the ClickHandlers
@@ -38,7 +39,7 @@ static void init() {
 
   //Subscribing to the accelerometer data service
   accel_data_service_subscribe(accelorometer_num_samples, dropDetector);
-  accel_service_set_sampling_rate(ACCEL_SAMPLING_10HZ);
+  accel_service_set_sampling_rate(ACCEL_SAMPLING_100HZ);
 
   // Create main Window
   s_main_window = window_create();
