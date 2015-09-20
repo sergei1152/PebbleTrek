@@ -25,6 +25,7 @@ void dropDetector(AccelData *data, uint32_t num_samples) {
 
   if(temp_high>higher_threshold && temp_low<lower_threshold){
     worker_launch_app();
+    app_worker_send_message(0, NULL);
   }
   else if(fallDetected==false){
   }

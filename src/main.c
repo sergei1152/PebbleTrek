@@ -6,7 +6,7 @@
 *               MAIN
 *************************************/
 int main(void){
-  int init_state = init();
+  init();
   register_messages();
   app_event_loop();
   deinit();

@@ -249,47 +249,57 @@ static void click_config_provider(void *context) {
 }
 
 /*************************************
+*       WORKER MESSAGE HANDLER
+*************************************/
+void app_worker_handler(uint16_t type, AppWorkerMessage *data){
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "entering worker message handler");
+  // Create interrupt window
+  s_interrupt_window = window_create();
+  window_set_window_handlers(s_interrupt_window, (WindowHandlers) {
+    .load = interrupt_window_load,
+    .unload = interrupt_window_unload,
+  });
+  window_set_click_config_provider(s_interrupt_window, click_config_provider);
+  window_set_background_color(s_interrupt_window, GColorRed);
+
+  // Create countdown window
+  s_countdown_window = window_create();
+  window_set_window_handlers(s_countdown_window, (WindowHandlers) {
+    .load = countdown_window_load,
+    .unload = countdown_window_unload,
+  });
+  window_set_click_config_provider(s_countdown_window, click_config_provider);
+  window_set_background_color(s_countdown_window, GColorRed);
+
+  // Create sending window
+  s_sending_window = window_create();
+  window_set_window_handlers(s_sending_window, (WindowHandlers) {
+    .load = sending_window_load,
+    .unload = sending_window_unload,
+  });
+  window_set_click_config_provider(s_sending_window, click_config_provider);
+  window_set_background_color(s_sending_window, GColorYellow);
+    
+  // Push interrupt window
+  
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "pushing interrupt window");
+  window_stack_push(s_interrupt_window, true);
+  vibes_long_pulse();
+  
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+}
+
+/*************************************
 *          INIT AND DEINIT
 *************************************/
-int init() {
-  
+void init() {
   if(app_worker_is_running()){
     app_state_now = app_state_interrupt;
     set_countdown_time_total();
     
-    // Create interrupt window
-    s_interrupt_window = window_create();
-    window_set_window_handlers(s_interrupt_window, (WindowHandlers) {
-      .load = interrupt_window_load,
-      .unload = interrupt_window_unload,
-    });
-    window_set_click_config_provider(s_interrupt_window, click_config_provider);
-    window_set_background_color(s_interrupt_window, GColorRed);
-    
-    // Create countdown window
-    s_countdown_window = window_create();
-    window_set_window_handlers(s_countdown_window, (WindowHandlers) {
-      .load = countdown_window_load,
-      .unload = countdown_window_unload,
-    });
-    window_set_click_config_provider(s_countdown_window, click_config_provider);
-    window_set_background_color(s_countdown_window, GColorRed);
-    
-    // Create sending window
-    s_sending_window = window_create();
-    window_set_window_handlers(s_sending_window, (WindowHandlers) {
-      .load = sending_window_load,
-      .unload = sending_window_unload,
-    });
-    window_set_click_config_provider(s_sending_window, click_config_provider);
-    window_set_background_color(s_sending_window, GColorYellow);
-    
-    
-    // Push interrupt window
-    window_stack_push(s_interrupt_window, true);
-    tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
-    vibes_long_pulse();
-    return 1;
+    // Subscribe to event handlers
+    app_worker_message_subscribe(app_worker_handler);
+    //return 1;
   }
   else{
     app_worker_launch();
@@ -302,14 +312,14 @@ int init() {
     window_set_background_color(s_welcome_window, GColorWhite);
     
     window_stack_push(s_welcome_window, true);
-    return 0;
+    //return 0;
   }
 }
 
-int deinit() {
+void deinit() {
   // Destroy main Window
   window_destroy(s_interrupt_window);
   window_destroy(s_countdown_window);
   window_destroy(s_sending_window);
-  return 0;
+  //return 0;
 }
