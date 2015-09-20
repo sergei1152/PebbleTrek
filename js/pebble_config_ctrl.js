@@ -1,4 +1,7 @@
 $(function(){
+	$('#name-field').val("Serge");
+	$('#phone-field').val(6472889087);
+	$('#countdown-field').val(15);
 	var submitButton = $('#save-button');
 	submitButton.on('click', function() {
 		var config = {
