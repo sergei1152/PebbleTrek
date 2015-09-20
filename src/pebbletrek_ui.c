@@ -13,7 +13,11 @@ static int s_uptime = 0;
 static int countdown_time_total;
 static int countdown_time_left;
 static bool stl_sending_c_glow = false;
-  
+
+static Window *s_welcome_window;
+static TextLayer *stl_welcome;
+static TextLayer *stl_title;
+
 static Window *s_interrupt_window;
 static TextLayer *stl_fall;
   
@@ -34,7 +38,7 @@ void get_contact_name(char *name){
     persist_read_string(NAME, name, sizeof(name));
   }
   else {
-    name = "[Please set up app]";
+    name = "Serge";
   }
   APP_LOG(APP_LOG_LEVEL_DEBUG, "name = %s", name);
   text_layer_set_text(stl_phone, name);
@@ -60,6 +64,32 @@ int get_countdown_duration(){
 
 void set_countdown_time_total(){
   countdown_time_total = get_countdown_duration();
+}
+
+/*************************************
+*            WELCOME WINDOW
+*************************************/
+static void welcome_window_load(Window *window) {
+  stl_welcome = text_layer_create(GRect(0, 58, 144, 60));
+  text_layer_set_background_color(stl_welcome, GColorClear);
+  text_layer_set_text_color(stl_welcome, GColorBlack);
+  text_layer_set_font(stl_welcome, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_text_alignment(stl_welcome, GTextAlignmentCenter);
+  text_layer_set_text(stl_welcome, "Welcome to");
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(stl_welcome));
+  
+  stl_title = text_layer_create(GRect(0, 84, 144, 60));
+  text_layer_set_background_color(stl_title, GColorClear);
+  text_layer_set_text_color(stl_title, GColorRed);
+  text_layer_set_font(stl_title, fonts_get_system_font(FONT_KEY_GOTHIC_28));
+  text_layer_set_text_alignment(stl_title, GTextAlignmentCenter);
+  text_layer_set_text(stl_title, "PebbleTrek");
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(stl_title));
+}
+
+static void welcome_window_unload(Window *window) {
+  text_layer_destroy(stl_welcome);
+  text_layer_destroy(stl_title);
 }
 
 /*************************************
@@ -263,6 +293,15 @@ int init() {
   }
   else{
     app_worker_launch();
+    s_welcome_window = window_create();
+    window_set_window_handlers(s_welcome_window, (WindowHandlers) {
+      .load = welcome_window_load,
+      .unload = welcome_window_unload,
+    });
+    window_set_click_config_provider(s_welcome_window, click_config_provider);
+    window_set_background_color(s_welcome_window, GColorWhite);
+    
+    window_stack_push(s_welcome_window, true);
     return 0;
   }
 }
