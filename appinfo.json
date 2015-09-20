@@ -13,7 +13,6 @@
     "sdkVersion": "3",
     "shortName": "PebbleTrek",
     "targetPlatforms": [
-        "aplite",
         "basalt"
     ],
     "uuid": "099337b8-7b87-41b3-9c1d-f3e2e7d722dc",
