@@ -6,6 +6,7 @@ $(function(){
 			'emergency_contact_phone': $('#phone-field').val(),
 			'countdown_duration': $('#countdown-field').val()
 		}
+		$('#save-button').attr('href','pebblejs://close#' + encodeURIComponent(JSON.stringify(config)));
 		// Return data to watchapp
 		location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(config));
 	});
