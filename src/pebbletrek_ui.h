@@ -1,4 +1,4 @@
 #pragma once
 
-void init();
-void deinit();
+int init();
+int deinit();

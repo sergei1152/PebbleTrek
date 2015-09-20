@@ -1,4 +1,3 @@
-
 #include "custom_math.h"
 
   //TODO: Convert this to a integer sqrt for better efficiency

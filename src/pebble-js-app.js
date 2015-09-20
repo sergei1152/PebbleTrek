@@ -14,45 +14,58 @@
 //   );
 // }
 
-Pebble.addEventListener('showConfiguration', function(e) {
-  // Show config page
-  Pebble.openURL('http://sergei1152.github.io/PebbleTrek/');
-});
-
-
-
-
-
-
-Pebble.addEventListener('webviewclosed', function(e) {
-  // Decode and parse config data as JSON
-  var config_data = JSON.parse(decodeURIComponent(e.response));
-  console.log('Config window returned: ', JSON.stringify(config_data));
-
-  // Prepare AppMessage payload
-  var dict = {
-    'NAME': config_data[emergency_contact_name],
-    'NUMBER': config_data[emergency_contact_phone],
-    'COUNTDOWN_DURATION': config_data[countdown_duration]
-  };
-//   var dict = {
-//     'NAME': "Donald Trump",
-//     'NUMBER': "123456789",
-//     'COUNTDOWN_DURATION': 15
-//   };
-
-  // Send settings to Pebble watchapp
-  Pebble.sendAppMessage(dict, function(e){
-    console.log('Sent config data to Pebble');  
-  }, function(e) {
-    console.log('Failed to send config data!');
-  });
-});
-
 Pebble.addEventListener('ready', function(e) {
   console.log('PebbleKit JS Ready!');
     
   // updateNumber('tes');
+  
+  
+  
+  
+  
+  
+  Pebble.addEventListener('showConfiguration', function(e) {
+    // Show config page
+    Pebble.openURL('http://sergei1152.github.io/PebbleTrek/');
+  });
+  
+  Pebble.addEventListener('webviewclosed', function(e) {
+    // Decode and parse config data as JSON
+    var config_data = JSON.parse(decodeURIComponent(e.response));
+    console.log('Config window returned: '+ JSON.stringify(config_data));
+  
+    // Prepare AppMessage payload
+    var dict = {
+      'NAME': config_data[emergency_contact_name],
+      'NUMBER': config_data[emergency_contact_phone],
+      'COUNTDOWN_DURATION': config_data[countdown_duration]
+    };
+    console.log(JSON.stringify(dict));
+  //   var dict = {
+  //     'NAME': "Donald Trump",
+  //     'NUMBER': "123456789",
+  //     'COUNTDOWN_DURATION': 15
+  //   };
+  
+    // Send settings to Pebble watchapp
+    Pebble.sendAppMessage(dict, function(e){
+      console.log('Sent config data to Pebble');  
+    }, function(e) {
+      console.log('Failed to send config data!');
+    });
+  });
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   // Receiving messages from Pebble
   Pebble.addEventListener('appmessage',
     function(e) {
