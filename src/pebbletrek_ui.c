@@ -24,24 +24,36 @@ static TextLayer *stl_cancel;
 
 static Window *s_sending_window;
 static TextLayer *stl_sending_to;
+static char *scp_name;
 static TextLayer *stl_phone;
 
 
 
-char* get_contact_name(){
-  char s_buffer[64];
-  persist_read_string(NAME, s_buffer, sizeof(s_buffer));
-  return s_buffer;
+void get_contact_name(char *name){
+  if (persist_exists(NAME)){
+    persist_read_string(NAME, name, sizeof(name));
+  }
+  else {
+    name = "[Please set up app]";
+  }
 }
 
-char* get_contact_number(){
-  char s_buffer[64];
-  persist_read_string(NUMBER, s_buffer, sizeof(s_buffer));
-  return s_buffer;
+void get_contact_number(char *number){
+  if (persist_exists(NUMBER)){
+    persist_read_string(NUMBER, number, sizeof(number));
+  }
+  else {
+    number = "[Please set up app]";
+  }
 }
 
 int get_countdown_duration(){
-  return (int)(persist_read_int(COUNTDOWN_DURATION));
+  if (persist_exists(COUNTDOWN_DURATION)){
+    return (int)(persist_read_int(COUNTDOWN_DURATION));
+  }
+  else {
+    return 15;
+  }
 }
 
 void set_countdown_time_total(){
@@ -123,7 +135,8 @@ static void sending_window_load(Window *window) {
   text_layer_set_text_color(stl_phone, GColorBlack);
   text_layer_set_font(stl_phone, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   text_layer_set_text_alignment(stl_phone, GTextAlignmentLeft);
-  text_layer_set_text(stl_phone, get_contact_name());
+  get_contact_name(scp_name);
+  text_layer_set_text(stl_phone, scp_name);
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(stl_phone));
 }
 
@@ -159,8 +172,10 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     app_state_now = app_state_sending;
     APP_LOG(APP_LOG_LEVEL_DEBUG, "pushing s_sending_window to window stack");
     window_stack_push(s_sending_window, true);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "double pulse vibration");
     vibes_double_pulse();
     // Send notify command to pebble js app
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "send int notify 1");
     send_int(NOTIFY, 1);
   }
   else if ((s_uptime > 3 + countdown_time_total) && (app_state_now == app_state_sending)){
@@ -201,6 +216,7 @@ static void click_config_provider(void *context) {
 *************************************/
 void init() {
   app_state_now = app_state_interrupt;
+  set_countdown_time_total();
   
   // Create interrupt window
   s_interrupt_window = window_create();

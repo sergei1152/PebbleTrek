@@ -30,16 +30,21 @@ Pebble.addEventListener('webviewclosed', function(e) {
   console.log('Config window returned: ', JSON.stringify(config_data));
 
   // Prepare AppMessage payload
+  // var dict = {
+  //   'NAME': config_data[emergency_contact_name],
+  //   'NUMBER': config_data[emergency_contact_phone],
+  //   'COUNTDOWN_DURATION': config_data[countdown_duration]
+  // };
   var dict = {
-    'NAME': config_data[emergency_contact_name],
-    'NUMBER': config_data[emergency_contact_phone],
-    'COUNTDOWN_DURATION': config_data[countdown_duration]
+    'NAME': "Donald Trump",
+    'NUMBER': "123456789",
+    'COUNTDOWN_DURATION': 15
   };
 
   // Send settings to Pebble watchapp
-  Pebble.sendAppMessage(dict, function(){
+  Pebble.sendAppMessage(dict, function(e){
     console.log('Sent config data to Pebble');  
-  }, function() {
+  }, function(e) {
     console.log('Failed to send config data!');
   });
 });

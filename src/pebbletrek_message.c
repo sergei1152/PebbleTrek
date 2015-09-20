@@ -21,7 +21,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
         persist_write_string(t->key, t->value->cstring);
         break;
       case COUNTDOWN_DURATION:
-        persist_write_int(t->key, t->value);
+        persist_write_int(t->key, t->value->uint32);
     }
     // Get next pair, if any
     t = dict_read_next(iterator);
