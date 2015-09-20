@@ -2,7 +2,6 @@
 #include "accelerometer.h"
 #include "config.h"
 #include "custom_math.h"
-
   
 static void fallDetectCallback(){
   fallDetected=true;
@@ -34,14 +33,20 @@ void dropDetector(AccelData *data, uint32_t num_samples) {
     
     if(acc_mag[i]<temp_low){
       temp_low=acc_mag[i];
+      
     }
     if(acc_mag[i]>temp_high){
       temp_high=acc_mag[i];
     }
-    
+    if(acc_mag[i]<min_acc){
+        min_acc=acc_mag[i];
+      }
+    if(acc_mag[i]>max_acc){
+        max_acc=acc_mag[i];
+      }
   }
 
-  if(temp_low<lower_threshold){
+  if(temp_high>higher_threshold && temp_low<lower_threshold){
     fallDetectCallback();
   }
   else if(fallDetected==false){

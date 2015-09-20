@@ -10,6 +10,6 @@ int acc_mag[25]; //make sure you change this too if you change samples
 // Long lived buffer
 char s_buffer[128];
 TextLayer *text_layer; //For outputting accelorometer values. Remove this after.
-int lower_threshold=350;
-int higher_threshold=5000;
+int lower_threshold=250;
+int higher_threshold=4000;
 bool fallDetected=false;

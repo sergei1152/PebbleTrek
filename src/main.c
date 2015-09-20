@@ -39,7 +39,7 @@ static void init() {
 
   //Subscribing to the accelerometer data service
   accel_data_service_subscribe(accelorometer_num_samples, dropDetector);
-  accel_service_set_sampling_rate(ACCEL_SAMPLING_100HZ);
+  accel_service_set_sampling_rate(ACCEL_SAMPLING_10HZ);
 
   // Create main Window
   s_main_window = window_create();
