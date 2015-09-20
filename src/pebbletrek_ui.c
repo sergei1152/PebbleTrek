@@ -24,7 +24,7 @@ static TextLayer *stl_cancel;
 
 static Window *s_sending_window;
 static TextLayer *stl_sending_to;
-static char *scp_name;
+char scp_name[] = "default";
 static TextLayer *stl_phone;
 
 
@@ -36,6 +36,8 @@ void get_contact_name(char *name){
   else {
     name = "[Please set up app]";
   }
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "name = %s", name);
+  text_layer_set_text(stl_phone, name);
 }
 
 void get_contact_number(char *number){
@@ -52,7 +54,7 @@ int get_countdown_duration(){
     return (int)(persist_read_int(COUNTDOWN_DURATION));
   }
   else {
-    return 15;
+    return 2;
   }
 }
 
@@ -135,8 +137,12 @@ static void sending_window_load(Window *window) {
   text_layer_set_text_color(stl_phone, GColorBlack);
   text_layer_set_font(stl_phone, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   text_layer_set_text_alignment(stl_phone, GTextAlignmentLeft);
+  
   get_contact_name(scp_name);
-  text_layer_set_text(stl_phone, scp_name);
+  
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "scp_name = %s", scp_name);
+  
+  
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(stl_phone));
 }
 
