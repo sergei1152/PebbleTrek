@@ -1,55 +1,24 @@
 #include <pebble.h>
-#include <math.h>
-#include <stdlib.h>
+#include "accelerometer.h"
 #include "custom_math.h"
-
+#include "config.h"
   
-
 static Window *s_main_window;
-TextLayer *text_layer; //For outputting accelorometer values. Remove this after.
-
-//accelorometer settings
-int max_acc=0;
-int min_acc=10E6;
-const uint32_t accelorometer_num_samples=1; //Number of samples for the accelerometer to take
 
 static void main_window_load(Window *window) {
+
   // Create Window's child Layers here
   text_layer = text_layer_create(GRect(0, 0, 144, 144));
   text_layer_set_text(text_layer, "Hello, Pebble!");
 
   // Add as child layer to be included in rendering
   layer_add_child(window_get_root_layer(s_main_window),text_layer_get_layer(text_layer));
-}
 
-static void dropDetector(AccelData *data, uint32_t num_samples) {
-  // Long lived buffer
-  static char s_buffer[128];
-  
-  int acc_mag=float_sqrt(data[0].x*data[0].x+data[0].y*data[0].y+data[0].z*data[0].z);
-  if(acc_mag>max_acc){
-    max_acc=acc_mag;
-  }
-   else if(acc_mag<min_acc){
-    min_acc=acc_mag;
-  }
- 
   // Compose string of all data for 3 samples
-  snprintf(s_buffer, sizeof(s_buffer), 
-    "N X,Y,Z\n0 %d,%d,%d\n Max Acc: %d\nMin Acc: %d\nMag Acc: %d", 
-    data[0].x, data[0].y, data[0].z,
-           max_acc, min_acc,
-    acc_mag
-  );
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "N X,Y,Z\n0 %d,%d,%d\n Max Acc: %d\nMin Acc: %d\nMag Acc: %d",  
-   data[0].x, data[0].y, data[0].z,
-          max_acc, min_acc,
-    acc_mag
-  );
 
-  //Show the data
-  text_layer_set_text(text_layer, s_buffer);
+
+  
 }
 
 static void main_window_unload(Window *window) {
