@@ -58,7 +58,7 @@ int get_countdown_duration(){
     return (int)(persist_read_int(COUNTDOWN_DURATION));
   }
   else {
-    return 15;
+    return 10;
   }
 }
 
@@ -128,7 +128,7 @@ static void countdown_window_load(Window *window) {
   text_layer_set_text_color(stl_time, GColorWhite);
   text_layer_set_font(stl_time, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT));
   text_layer_set_text_alignment(stl_time, GTextAlignmentRight);
-  text_layer_set_text(stl_time, "15 sec");
+  text_layer_set_text(stl_time, "10 sec");
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(stl_time));
   
   stl_cancel = text_layer_create(GRect(5, 78, 134, 90));
@@ -197,7 +197,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   else if ((s_uptime > 3) && (s_uptime <= 3 + countdown_time_total)){
     APP_LOG(APP_LOG_LEVEL_DEBUG, "decrementing countdown_time_left to %d", countdown_time_left);
     countdown_time_left--;
-    static char buffer[] = "15 sec";
+    static char buffer[] = "10 sec";
     snprintf(buffer, 7, "%d sec", countdown_time_left);
     APP_LOG(APP_LOG_LEVEL_DEBUG, "buffer = '%s'", buffer);
     text_layer_set_text(stl_time, buffer);
@@ -217,8 +217,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   else if ((s_uptime > 3 + countdown_time_total) && (app_state_now == app_state_sending)){
     stl_sending_c_glow = !stl_sending_c_glow;
     if (stl_sending_c_glow){
-      text_layer_set_text_color(stl_sending_to, GColorRed);
-      text_layer_set_text_color(stl_phone, GColorRed);
+      text_layer_set_text_color(stl_sending_to, GColorWhite);
+      text_layer_set_text_color(stl_phone, GColorWhite);
     }
     else{
       text_layer_set_text_color(stl_sending_to, GColorBlack);
@@ -282,7 +282,7 @@ int init() {
       .unload = sending_window_unload,
     });
     window_set_click_config_provider(s_sending_window, click_config_provider);
-    window_set_background_color(s_sending_window, GColorYellow);
+    window_set_background_color(s_sending_window, GColorRed);
     
     
     // Push interrupt window

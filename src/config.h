@@ -11,3 +11,4 @@ extern char s_buffer[128];
 extern int lower_threshold;
 extern int higher_threshold;
 extern bool fallDetected;
+
