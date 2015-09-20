@@ -12,15 +12,17 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   Tuple *t = dict_read_first(iterator);
   // Process all pairs present
   while (t != NULL) {
-    // static char s_buffer[64];
-    // switch (t->key) {
-    //   case NUMBER:
-        // snprintf(s_buffer, sizeof(s_buffer), "%s", t->value->cstring);
+    static char s_buffer[64];
+    switch (t->key) {
+      case NUMBER:
+      case NAME:
+        snprintf(s_buffer, sizeof(s_buffer), "%s", t->value->cstring);
         // TODO: Save the new number in the pebble storage. Number is locates in s_buffer
         persist_write_string(t->key, t->value->cstring);
-    //     break;
-    //   }
-    // }
+        break;
+      case COUNTDOWN_DURATION:
+        persist_write_int(t->key, t->value);
+    }
     // Get next pair, if any
     t = dict_read_next(iterator);
   }

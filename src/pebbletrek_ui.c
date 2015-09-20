@@ -10,7 +10,7 @@ enum appState {
 
 static int app_state_now;
 static int s_uptime = 0;
-static int countdown_time_total = 15;
+static int countdown_time_total;
 static int countdown_time_left;
 static bool stl_sending_c_glow = false;
   
@@ -28,10 +28,24 @@ static TextLayer *stl_phone;
 
 
 
-int get_contact_name(){
+char* get_contact_name(){
   char s_buffer[64];
   persist_read_string(NAME, s_buffer, sizeof(s_buffer));
   return s_buffer;
+}
+
+char* get_contact_number(){
+  char s_buffer[64];
+  persist_read_string(NUMBER, s_buffer, sizeof(s_buffer));
+  return s_buffer;
+}
+
+int get_countdown_duration(){
+  return (int)(persist_read_int(COUNTDOWN_DURATION));
+}
+
+void set_countdown_time_total(){
+  countdown_time_total = get_countdown_duration();
 }
 
 /*************************************
