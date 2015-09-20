@@ -27,12 +27,17 @@ static TextLayer *stl_sending_to;
 static TextLayer *stl_phone;
 
 
+
+int get_contact_name(){
+  char s_buffer[64];
+  persist_read_string(NAME, s_buffer, sizeof(s_buffer));
+  return s_buffer;
+}
+
 /*************************************
 *          INTERRUPT WINDOW
 *************************************/
 static void interrupt_window_load(Window *window) {
-  // Create Window's child Layers here 
-  
   stl_fall = text_layer_create(GRect(0, 60, 144, 60));
   text_layer_set_background_color(stl_fall, GColorClear);
   text_layer_set_text_color(stl_fall, GColorWhite);
@@ -43,7 +48,6 @@ static void interrupt_window_load(Window *window) {
 }
 
 static void interrupt_window_unload(Window *window) {
-  // Destroy Window's child Layers here
   text_layer_destroy(stl_fall);
 }
 
@@ -105,7 +109,7 @@ static void sending_window_load(Window *window) {
   text_layer_set_text_color(stl_phone, GColorBlack);
   text_layer_set_font(stl_phone, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   text_layer_set_text_alignment(stl_phone, GTextAlignmentLeft);
-  text_layer_set_text(stl_phone, "123-456-7890");
+  text_layer_set_text(stl_phone, get_contact_name());
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(stl_phone));
 }
 

@@ -1,7 +1,8 @@
 {
     "appKeys": {
         "NOTIFY": 1,
-        "NUMBER": 2
+        "NUMBER": 2,
+        "COUNTDOWN_DURATION": 3
     },
     "capabilities": [
         "location",
