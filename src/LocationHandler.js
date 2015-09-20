@@ -41,17 +41,3 @@ function sendSMSNotificationWithContent(message){
   var encodedMessage = "From=%2B16042435332&To=%2B16477719615&Body="+message;
   req.send(encodedMessage);
 }
-
-
-// ---------------------------------MAIN-------------------------
-Pebble.addEventListener('ready',
-  function(e) {
-    // Request current position
-    getCurrentLocationGoogleMapsLink(function(link){
-      console.log(link);
-    });
-    
-    //Send Notification SMS
-    sendSMSNotificationWithContent("testContent");
-  }
-);
