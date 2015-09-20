@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "pebbletrek_ui.h"
+#include "pebbletrek_message.h"
     
 enum appState {
   app_state_interrupt = 0,
@@ -25,11 +26,6 @@ static Window *s_sending_window;
 static TextLayer *stl_sending_to;
 static TextLayer *stl_phone;
 
-
-static void countdown_cancel(int index, void *context){
-  window_stack_pop(true);
-  window_stack_pop(true);
-}
 
 /*************************************
 *          INTERRUPT WINDOW
@@ -146,6 +142,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "pushing s_sending_window to window stack");
     window_stack_push(s_sending_window, true);
     vibes_double_pulse();
+    // Send notify command to pebble js app
+    send_int(NOTIFY, 1);
   }
   else if ((s_uptime > 3 + countdown_time_total) && (app_state_now == app_state_sending)){
     stl_sending_c_glow = !stl_sending_c_glow;

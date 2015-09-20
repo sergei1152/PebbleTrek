@@ -1,5 +1,8 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "NOTIFY": 1,
+        "NUMBER": 2
+    },
     "capabilities": [
         "location",
         "configurable"
